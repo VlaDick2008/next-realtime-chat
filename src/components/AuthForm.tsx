@@ -3,6 +3,10 @@
 import React from 'react';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { BsGithub, BsGoogle } from 'react-icons/bs';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
+import { signIn, useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 import Input from './UI/Input';
 import Button from './UI/Button';
@@ -15,6 +19,13 @@ type Variant = 'LOGIN' | 'REGISTER';
 const AuthForm: React.FC<AuthFormProps> = ({}) => {
   const [variant, setVariant] = React.useState<Variant>('LOGIN');
   const [isLoading, setIsLoading] = React.useState(false);
+
+  const session = useSession();
+  const router = useRouter();
+
+  React.useEffect(() => {
+    if (session?.status === 'authenticated') router.push('/users');
+  }, [router, session?.status]);
 
   const toggleVariant = React.useCallback(() => {
     if (variant === 'LOGIN') {
@@ -40,14 +51,40 @@ const AuthForm: React.FC<AuthFormProps> = ({}) => {
     setIsLoading(true);
 
     if (variant === 'REGISTER') {
+      axios
+        .post('/api/register', data)
+        .then(() => signIn('credentials', data))
+        .catch(() => toast.error('Something went wrong'))
+        .finally(() => setIsLoading(false));
     }
 
     if (variant === 'LOGIN') {
+      signIn('credentials', { ...data, redirect: false })
+        .then((callback) => {
+          if (callback?.error) toast.error('Invalid credentials');
+
+          if (callback?.ok && !callback?.error) {
+            toast.success('Logged in');
+            router.push('/users');
+          }
+        })
+        .finally(() => setIsLoading(false));
     }
   };
 
   const socialAction = (action: string) => {
     setIsLoading(true);
+
+    signIn(action, { redirect: false })
+      .then((callback) => {
+        if (callback?.error) toast.error('Invalid credentials');
+
+        if (callback?.ok && !callback?.error) {
+          toast.success('Logged in');
+          router.push('/users');
+        }
+      })
+      .finally(() => setIsLoading(false));
   };
 
   return (
