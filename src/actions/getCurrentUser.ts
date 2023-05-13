@@ -10,6 +10,7 @@ const getCurrentUser = async () => {
     const currentUser = await prismaClient.user.findUnique({
       where: {
         email: session.user.email as string,
+        id: session.user.email,
       },
     });
 
