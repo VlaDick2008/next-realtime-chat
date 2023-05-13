@@ -4,7 +4,7 @@ import getUsers from '@/actions/getUsers';
 import Sidebar from '@/components/sidebar/Sidebar';
 import UserList from '@/components/UserList';
 
-const UsersLayout = async ({ children }: React.ReactNode) => {
+export default async function UsersLayout({ children }: { children: React.ReactNode }) {
   const users = await getUsers();
 
   return (
@@ -16,6 +16,4 @@ const UsersLayout = async ({ children }: React.ReactNode) => {
       </div>
     </Sidebar>
   );
-};
-
-export default UsersLayout;
+}

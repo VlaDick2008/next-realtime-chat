@@ -5,7 +5,7 @@ import getUsers from '@/actions/getUsers';
 import Sidebar from '@/components/sidebar/Sidebar';
 import ConversationsList from '@/components/ConversationsList';
 
-const ConversationsLayout = async ({ children }: React.ReactNode) => {
+export default async function ConversationsLayout({ children }: { children: React.ReactNode }) {
   const conversations = await getConversations();
   const users = await getUsers();
 
@@ -18,6 +18,4 @@ const ConversationsLayout = async ({ children }: React.ReactNode) => {
       </div>
     </Sidebar>
   );
-};
-
-export default ConversationsLayout;
+}
