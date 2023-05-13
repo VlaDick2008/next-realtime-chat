@@ -6,9 +6,7 @@ import useConversation from '@/hooks/useConversation';
 
 import MobileFooterItem from './MobileFooterItem';
 
-interface MobileFooterProps {}
-
-const MobileFooter: React.FC<MobileFooterProps> = ({}) => {
+const MobileFooter = () => {
   const routes = useRoutes();
   const { isOpen } = useConversation();
 

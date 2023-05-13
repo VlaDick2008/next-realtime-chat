@@ -7,7 +7,6 @@ import Link from 'next/link';
 
 interface MobileFooterItemProps {
   href: string;
-  label: string;
   icon: IconType;
   active?: boolean;
   onClick?: () => void;
@@ -15,7 +14,6 @@ interface MobileFooterItemProps {
 
 const MobileFooterItem: React.FC<MobileFooterItemProps> = ({
   href,
-  label,
   icon: Icon,
   active,
   onClick,
